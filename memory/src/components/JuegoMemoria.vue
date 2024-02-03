@@ -3,7 +3,7 @@
     <div class="container mt-5">
       <div class="row">
         <CartaJuego
-          v-for="(valor, index) in cartas"
+          v-for="(valor, index) in cartasMezcladas"
           :key="index"
           :valor="valor"
           :mostrando="cartasMostradas.includes(index) || cartasEncontradas.includes(valor)"
@@ -13,7 +13,10 @@
         />
       </div>
       <div v-if="juegoCompletado" class="mt-3">
-        ¡Felicidades, has completado el juego!
+        <p :style="{ fontSize: juegoCompletado ? '24px' : 'inherit', fontWeight: juegoCompletado ? 'bold' : 'normal', color: juegoCompletado ? '#ffffff' : '#000000' }">
+          ¡Felicidades, has completado el juego en {{ tiempoTranscurrido }} segundos!
+        </p>
+        <button v-if="juegoCompletado" @click="reiniciarJuego" class="btn btn-primary" style="background-color: #3a1c3d;">Volver a Empezar</button>
       </div>
     </div>
   </div>
@@ -29,10 +32,17 @@ export default {
   data() {
     return {
       cartas: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'],
+      cartasMezcladas: [],
       cartasMostradas: [],
       cartasEncontradas: [],
-      juegoCompletado: false
+      juegoCompletado: false,
+      tiempoInicio: null,
+      tiempoTranscurrido: 0
     };
+  },
+  mounted() {
+    this.mezclarCartas();
+    this.iniciarContadorTiempo();
   },
   methods: {
     hacerClicEnCarta(index) {
@@ -40,23 +50,45 @@ export default {
         this.cartasMostradas.push(index);
 
         if (this.cartasMostradas.length === 2) {
-          // Verificar si las cartas son iguales
-          if (this.cartas[this.cartasMostradas[0]] === this.cartas[this.cartasMostradas[1]]) {
-            // Las cartas son iguales, marcarlas como encontradas
-            this.cartasEncontradas.push(this.cartas[this.cartasMostradas[0]]);
+          if (this.cartasMezcladas[this.cartasMostradas[0]] === this.cartasMezcladas[this.cartasMostradas[1]]) {
+            this.cartasEncontradas.push(this.cartasMezcladas[this.cartasMostradas[0]]);
             
-            // Verificar si todas las cartas han sido encontradas
-            if (this.cartasEncontradas.length === this.cartas.length / 2) {
+            if (this.cartasEncontradas.length === this.cartasMezcladas.length / 2) {
               this.juegoCompletado = true;
+              this.detenerContadorTiempo();
             }
           }
 
-          // Ocultar las cartas después de un breve tiempo
           setTimeout(() => {
             this.cartasMostradas = [];
-          }, 1000); // Ajusta el tiempo según tus preferencias
+          }, 1000);
         }
       }
+    },
+    reiniciarJuego() {
+      this.juegoCompletado = false;
+      this.cartasMostradas = [];
+      this.cartasEncontradas = [];
+      this.mezclarCartas();
+      this.iniciarContadorTiempo();
+    },
+    mezclarCartas() {
+      // Clonar y mezclar el array de cartas
+      this.cartasMezcladas = [...this.cartas].sort(() => Math.random() - 0.5);
+    },
+    iniciarContadorTiempo() {
+      this.tiempoInicio = new Date();
+      this.actualizarContadorTiempo();
+    },
+    detenerContadorTiempo() {
+      this.tiempoTranscurrido = Math.floor((new Date() - this.tiempoInicio) / 1000);
+    },
+    actualizarContadorTiempo() {
+      setInterval(() => {
+        if (!this.juegoCompletado) {
+          this.tiempoTranscurrido = Math.floor((new Date() - this.tiempoInicio) / 1000);
+        }
+      }, 1000);
     }
   }
 };

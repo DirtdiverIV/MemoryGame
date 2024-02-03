@@ -36,8 +36,9 @@ export default {
   border: 1px solid #ccc;
   cursor: pointer;
   position: relative;
-  margin: 0; /* Elimina el margen */
-  padding: 0; /* Elimina el relleno */
+  margin: 0; 
+  padding: 0; 
+  border: 0px;
 }
 
 img {
@@ -53,7 +54,7 @@ img {
 }
 
 .cubierta img {
-  max-width: 100%; /* Ajusta el tamaño de la imagen de la cubierta según sea necesario */
+  max-width: 100%; 
   max-height: 100%;
 }
 </style>

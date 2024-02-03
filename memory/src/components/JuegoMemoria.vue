@@ -27,13 +27,13 @@ export default {
     CartaJuego
   },
   data() {
-  return {
-    cartas: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
-    cartasMostradas: [],
-    cartasEncontradas: [],
-    juegoCompletado: false
-  };
-},
+    return {
+      cartas: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'],
+      cartasMostradas: [],
+      cartasEncontradas: [],
+      juegoCompletado: false
+    };
+  },
   methods: {
     hacerClicEnCarta(index) {
       if (!this.cartasMostradas.includes(index) && this.cartasMostradas.length < 2) {
